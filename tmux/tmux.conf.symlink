@@ -1,0 +1,115 @@
+if-shell "uname | grep -q Darwin" \
+    'set -g default-command "login-shell"'
+
+# tmux display things in 256 colors
+set -g default-terminal "tmux-256color"
+set -as terminal-overrides ',xterm*:Tc:sitm=\E[3m'
+
+set -g history-limit 20000
+set -g renumber-windows on      # automatically renumber tmux windows
+
+set -g prefix C-a               # set prefix to Ctrl+a
+bind C-a send-prefix            # ensure that we can send Ctrl-a to other apps
+
+# for nested tmux sessions
+bind-key a send-prefix
+
+# Activity Monitoring
+setw -g monitor-activity off
+set -g visual-activity off
+
+# Rather than constraining window size to the maximum size of any client
+# connected to the *session*, constrain window size to the maximum size of any
+# client connected to *that window*. Much more reasonable.
+setw -g aggressive-resize on
+
+# make delay shorter
+set -sg escape-time 0
+
+# tile all windows
+unbind =
+bind = select-layout tiled
+
+# cycle through panes
+# unbind C-a
+# unbind o # this is the default key for cycling panes
+# bind ^A select-pane -t:.+
+
+# make window/pane index start with 1
+set -g base-index 1
+setw -g pane-base-index 1
+
+######################
+#### Key Bindings ####
+######################
+
+bind-key e split-window -h vim ~/.tmux.conf   # edit configuration file
+bind r source-file ~/.tmux.conf \; display "Tmux configuration reloaded"
+
+bind N new-window               # quickly open a new window
+
+# Delete window and pane without confirmation
+bind-key & kill-window
+bind-key q kill-window
+bind-key x kill-pane
+
+# split window and fix path for tmux 1.9
+bind | split-window -h -c "#{pane_current_path}"
+bind - split-window -v -c "#{pane_current_path}"
+
+bind y setw synchronize-panes   # synchronize all panes in a window
+
+# Pane movement shortcuts
+bind h select-pane -L
+bind j select-pane -D
+bind k select-pane -U
+bind l select-pane -R
+
+# Move through the windows
+bind -r C-h select-window -t :-
+bind -r C-l select-window -t :+
+
+# Resize pane shortcuts
+bind -r H resize-pane -L 10
+bind -r J resize-pane -D 10
+bind -r K resize-pane -U 10
+bind -r L resize-pane -R 10
+
+# enable mouse support for switching panes/windows
+setw -g mouse on
+
+# set vi mode for copy mode
+setw -g mode-keys vi
+# more settings to make copy-mode more vim-like
+unbind [
+bind Escape copy-mode
+unbind p
+bind p paste-buffer
+bind -Tcopy-mode-vi 'v' send -X begin-selection
+
+if-shell "uname | grep -q Darwin" " \
+    bind-key -T copy-mode-vi y send -X copy-pipe-and-cancel 'tmux save-buffer - | reattach-to-user-namespace pbcopy'; \
+    bind C-c run 'tmux save-buffer - | reattach-to-user-namespace pbcopy'; \
+    bind C-v run 'tmux set-buffer $(reattach-to-user-namespace pbpaste); tmux paste-buffer'" " \
+    bind-key -T copy-mode-vi y send -X copy-pipe-and-cancel 'xclip -selection clipboard -in'"
+
+##############################
+### Color & Style Settings ###
+##############################
+
+if-shell 'uname | grep -q Darwin' \
+'source-file ~/.dotfiles/tmux/tmux-osx.conf'
+
+# Extensions
+set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'tmux-plugins/tmux-sensible'
+set -g @plugin 'odedlaz/tmux-onedark-theme'
+set -g @plugin 'tmux-plugins/tmux-resurrect'  # restore: prefix + Ctrl-r; save: prefix + Ctrl-s
+set -g @plugin 'tmux-plugins/tmux-continuum'
+set -g @continuum-boot 'on'  # Tmux is automatically started after the computer is turned on. This doesn't start a terminal with tmux
+set -g @continuum-restore 'on'  # last saved environment is automatically restored when tmux is started
+#set -g @continuum-save-interval '0'  # stop automatic saving
+set -g @resurrect-dir '~/Dropbox/.tmux-resurrect/'
+
+# Initialize TPM (Tmux Plugin Manager). Press <Prefix>I to load plugins
+run '~/.tmux/plugins/tpm/tpm'
