@@ -27,13 +27,6 @@ COLOR_YELLOW="\e[1;33m"
 COLOR_WHITE="\e[1;37m"
 COLOR_NONE="\e[0m"
 
-if [ -z "$TMUX" ]; then
-    export TERM=xterm-256color-italic
-else
-    export TERM=tmux-256color
-fi
-
-
 # initialize autocomplete
 autoload -U compinit add-zsh-hook
 compinit
@@ -43,17 +36,18 @@ prepend_path /usr/local/opt/grep/libexec/gnubin
 prepend_path /usr/local/sbin
 prepend_path $DOTFILES/bin
 prepend_path $HOME/bin
+prepend_path /snap/bin
 eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 
 # WSL
 if  grep -q Microsoft /proc/version;  then
-  export DISPLAY=:0
+    export DISPLAY=:0
 fi
 
 # define the code directory
 # This is where my code exists and where I want the `c` autocomplete to work from exclusively
-if [[ -d ~/code ]]; then
-    export CODE_DIR=~/code
+if [[ -d ~/Dropbox/code ]]; then
+    export CODE_DIR=~/Dropbox/code
 fi
 
 export REPORTTIME=10    # display how long all tasks over 10 seconds take
@@ -78,25 +72,27 @@ setopt HIST_IGNORE_ALL_DUPS
 setopt COMPLETE_ALIASES
 
 # Make terminal command navigation sane again
-bindkey "^[[1;5C" forward-word                        # [Ctrl-right] - forward one word
-bindkey "^[[1;5D" backward-word                       # [Ctrl-left] - backward one word
-bindkey '^[^[[C' forward-word                         # [Ctrl-right] - forword one word
-bindkey '^[^[[D' backward-word                        # [Ctrl-left] - backward one word
-bindkey '^[[1;3D' beginning-of-line                   # [Alt-left] - beginning of line
-bindkey '^[[1;3C' end-of-line                         # [Alt-right] - end of line
-bindkey '^[[5D' beginning-of-line                     # [Alt-left] - beginning of line
-bindkey '^[[5C' end-of-line                           # [Alt-right] - end of line
-bindkey '^?' backward-delete-char                     # [Backspace] - delete backward
+bindkey "^[[1;5C" forward-word                      # [Ctrl-right] - forward one word
+bindkey "^[[1;5D" backward-word                     # [Ctrl-left] - backward one word
+bindkey '^[^[[C' forward-word                       # [Ctrl-right] - forward one word
+bindkey '^[^[[D' backward-word                      # [Ctrl-left] - backward one word
+bindkey '^[[1;3D' beginning-of-line                 # [Alt-left] - beginning of line
+bindkey '^[[1;3C' end-of-line                       # [Alt-right] - end of line
+bindkey '^[[5D' beginning-of-line                   # [Alt-left] - beginning of line
+bindkey '^[[5C' end-of-line                         # [Alt-right] - end of line
+bindkey '^?' backward-delete-char                   # [Backspace] - delete backward
 if [[ "${terminfo[kdch1]}" != "" ]]; then
-  bindkey "${terminfo[kdch1]}" delete-char            # [Delete] - delete forward
+    bindkey "${terminfo[kdch1]}" delete-char        # [Delete] - delete forward
 else
-  bindkey "^[[3~" delete-char                         # [Delete] - delete forward
-  bindkey "^[3;5~" delete-char
-  bindkey "\e[3~" delete-char
+    bindkey "^[[3~" delete-char                     # [Delete] - delete forward
+    bindkey "^[3;5~" delete-char
+    bindkey "\e[3~" delete-char
 fi
 bindkey "^A" vi-beginning-of-line
-bindkey -M viins "^F" vi-forward-word   # move to next word with ctrl-F
-bindkey -M viins "^E" vi-add-eol        # Move to end of line with ctrl-E
+bindkey -M viins "^F" vi-forward-word               # [Ctrl-f] - move to next word
+bindkey -M viins "^E" vi-add-eol                    # [Ctrl-e] - move to end of line
+bindkey "^J" history-beginning-search-forward
+bindkey "^K" history-beginning-search-backward
 
 # Matches case insensitive for lowercase
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
@@ -123,9 +119,9 @@ typeset -A plugins  # array containing plugin information (managed by zfetch)
 zfetch $ZPLUGDIR zsh-users/zsh-syntax-highlighting
 zfetch $ZPLUGDIR zsh-users/zsh-autosuggestions
 zfetch $ZPLUGDIR chriskempson/base16-shell
-if [[ ( "$( uname )" == "Darwin" ) && ( "$FNM_LOADED" != "true" ) ]]; then
-    eval "`fnm env --multi --use-on-cd`"
-    export FNM_LOADED="true"
+if [[ -x "$(command -v fnm)" ]]; then
+    eval "$(fnm env --multi --use-on-cd)"
+    export FNM_LOADED=1
 fi
 
 [[ -e ~/.terminfo ]] && export TERMINFO_DIRS=~/.terminfo:/usr/share/terminfo
@@ -180,7 +176,8 @@ else # macOS `ls`
 fi
 
 # use nvim, but don't make me think about it
-alias vim="nvim"
+alias v="nvim"
+alias vi="nvim"
 
 # Filesystem aliases
 alias ..='cd ..'
@@ -215,8 +212,5 @@ alias clsym="find -L . -name . -o -type d -prune -o -type l -exec rm {} +"
 alias gs='git s'
 alias glog="git l"
 
-# tmux aliases
-alias ta='tmux attach'
-alias tls='tmux ls'
-alias tat='tmux attach -t'
-alias tns='tmux new-session -s'
+# recursively source all .zsh files inside the plugins directory
+for config ($ZSH/plugins/**/*.zsh) source $config

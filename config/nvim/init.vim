@@ -447,12 +447,21 @@ call plug#begin('~/.config/nvim/plugged')
         \  'down':    '40%'})
 
         command! -bang -nargs=* Find call fzf#vim#grep(
-            \ 'rg --column --line-number --no-heading --follow --color=always '.<q-args>, 1,
+            \ 'rg --column --line-number --no-heading --follow --color=always '.<q-args>.' || true', 1,
             \ <bang>0 ? fzf#vim#with_preview('up:60%') : fzf#vim#with_preview('right:50%:hidden', '?'), <bang>0)
         command! -bang -nargs=? -complete=dir Files
             \ call fzf#vim#files(<q-args>, fzf#vim#with_preview('right:50%', '?'), <bang>0)
         command! -bang -nargs=? -complete=dir GitFiles
             \ call fzf#vim#gitfiles(<q-args>, fzf#vim#with_preview('right:50%', '?'), <bang>0)
+        function! RipgrepFzf(query, fullscreen)
+            let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
+            let initial_command = printf(command_fmt, shellescape(a:query))
+            let reload_command = printf(command_fmt, '{q}')
+            let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+            call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+        endfunction
+
+        command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
     " }}}
 
     " vim-fugitive {{{
@@ -476,7 +485,7 @@ call plug#begin('~/.config/nvim/plugged')
     " }}}
 
     " coc {{{
-        Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': 'yarn install --frozen-lockfile'}
+        Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
         let g:coc_global_extensions = [
         \ 'coc-css',
@@ -509,7 +518,7 @@ call plug#begin('~/.config/nvim/plugged')
 
         nmap <silent> <leader>k :CocCommand explorer<cr>
 
-        "remap keys for gotos
+        " remap keys for gotos
         nmap <silent> gd <Plug>(coc-definition)
         nmap <silent> gy <Plug>(coc-type-definition)
         nmap <silent> gi <Plug>(coc-implementation)
@@ -541,7 +550,7 @@ call plug#begin('~/.config/nvim/plugged')
             endif
         endfunction
 
-        "tab completion
+        " Tab completion
         inoremap <silent><expr> <TAB>
             \ pumvisible() ? "\<C-n>" :
             \ <SID>check_back_space() ? "\<TAB>" :
@@ -556,9 +565,9 @@ call plug#begin('~/.config/nvim/plugged')
         " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
         " position. Coc only does snippet and additional edit on confirm.
         if exists('*complete_info')
-            inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+            inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-o>" : "\<C-g>u\<CR>"
         else
-            imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+            imap <expr> <cr> pumvisible() ? "\<C-o>" : "\<C-g>u\<CR>"
         endif
 
         " For enhanced <CR> experience with coc-pairs checkout :h coc#on_enter()
@@ -590,6 +599,10 @@ call plug#begin('~/.config/nvim/plugged')
         Plug 'leafgarland/typescript-vim', { 'for': ['typescript', 'typescript.tsx'] }
     " }}}
 
+    " Python {{{
+        Plug 'tmhedberg/SimpylFold', { 'for': 'python' } " easy folding
+        Plug 'nvie/vim-flake8', { 'for': 'python' } " PEP8 linting
+    " }}}
 
     " Styles {{{
         Plug 'wavded/vim-stylus', { 'for': ['stylus', 'markdown'] }
@@ -615,6 +628,16 @@ call plug#begin('~/.config/nvim/plugged')
         let g:vim_json_syntax_conceal = 0
     " }}}
 
+    " PHP {{{
+        Plug 'StanAngeloff/php.vim', {'for': 'php'}
+        Plug 'stephpy/vim-php-cs-fixer', {'for': 'php'}
+        Plug 'nishigori/vim-php-dictionary', {'for': 'php'}
+        Plug 'lumiliet/vim-twig', {'for': 'twig'} " twig
+        Plug 'adoy/vim-php-refactoring-toolbox', {'for': 'php'} " php refactoring options
+        Plug 'phpactor/phpactor', {'for': 'php', 'do': 'composer install --no-dev -o'}
+        Plug '2072/php-indenting-for-vim', {'for': 'php'}
+        Plug 'tobyS/vmustache' | Plug 'tobyS/pdv', {'for': 'php'} " php doc autocompletion
+    " }}}
     Plug 'ekalinin/Dockerfile.vim'
 " }}}
 
