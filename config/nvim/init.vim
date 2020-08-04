@@ -145,13 +145,14 @@ call plug#begin('~/.config/nvim/plugged')
     " Load colorschemes
     Plug 'chriskempson/base16-vim'
     Plug 'joshdick/onedark.vim'
+    "Plug 'rakr/vim-one'
 
     " Statusline {{{
-    Plug 'joshdick/onedark.vim' " load colorscheme
     Plug 'vim-airline/vim-airline' " Fancy statusline
     Plug 'vim-airline/vim-airline-themes' " Themes for vim-airline
     let g:airline_powerline_fonts=1
     let g:airline_theme='onedark'
+    "let g:airline_theme='one'
     let g:airline#extensions#tabline#enabled = 1
     let g:airline#extensions#tabline#tab_min_count = 2
     let g:airline#extensions#tabline#show_buffers = 1
@@ -602,6 +603,10 @@ call plug#begin('~/.config/nvim/plugged')
     " Python {{{
         Plug 'tmhedberg/SimpylFold', { 'for': 'python' } " easy folding
         Plug 'nvie/vim-flake8', { 'for': 'python' } " PEP8 linting
+        Plug 'Vimjas/vim-python-pep8-indent'
+        Plug 'vim-python/python-syntax' " Syntax highlighting
+        let g:python_highlight_all = 1
+        let g:python_highlight_file_headers_as_comments = 1
     " }}}
 
     " Styles {{{
@@ -650,6 +655,10 @@ call plug#end()
     let g:onedark_terminal_italics=1
     syntax on
     colorscheme onedark
+    "colorscheme one
+    "set background=dark
+    "let g:one_allow_italics = 1
+
     filetype plugin indent on
     " make the highlighting of tabs and other non-text less annoying
     highlight SpecialKey ctermfg=19 guifg=#333333

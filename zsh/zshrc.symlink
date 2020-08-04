@@ -36,6 +36,9 @@ prepend_path /usr/local/opt/grep/libexec/gnubin
 prepend_path /usr/local/sbin
 prepend_path $DOTFILES/bin
 prepend_path $HOME/bin
+# It’s a good idea to have this folder on your path because it’s where Python
+# will install things when you use pip install --user
+prepend_path $HOME/.local/bin
 prepend_path /snap/bin
 eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 
@@ -54,7 +57,7 @@ export REPORTTIME=10    # display how long all tasks over 10 seconds take
 export KEYTIMEOUT=1     # 10ms delay for key sequences
 
 setopt NO_BG_NICE
-setopt NO_HUP
+setopt NO_HUP                    # don't kill background jobs when the shell exits
 setopt NO_LIST_BEEP
 setopt LOCAL_OPTIONS
 setopt LOCAL_TRAPS
@@ -62,12 +65,20 @@ setopt PROMPT_SUBST
 
 # History
 HISTFILE=~/.zsh_history
-HISTSIZE=10000
-SAVEHIST=10000
-setopt EXTENDED_HISTORY
-setopt HIST_REDUCE_BLANKS
-setopt SHARE_HISTORY
-setopt HIST_IGNORE_ALL_DUPS
+HISTSIZE=10000000
+SAVEHIST=10000000
+setopt BANG_HIST                 # treat the '!' character specially during expansion.
+setopt EXTENDED_HISTORY          # write the history file in the ":start:elapsed;command" format.
+setopt INC_APPEND_HISTORY        # write to the history file immediately, not when the shell exits.
+setopt SHARE_HISTORY             # share history between all sessions.
+setopt HIST_EXPIRE_DUPS_FIRST    # expire duplicate entries first when trimming history.
+setopt HIST_IGNORE_DUPS          # don't record an entry that was just recorded again.
+setopt HIST_IGNORE_ALL_DUPS      # delete old recorded entry if new entry is a duplicate.
+setopt HIST_SAVE_NO_DUPS         # don't write duplicate entries in the history file.
+setopt HIST_REDUCE_BLANKS        # remove superfluous blanks before recording entry.
+setopt HIST_VERIFY               # don't execute immediately upon history expansion.
+# A useful trick to prevent particular entries from being recorded into a history by preceding them with at least one space.
+setopt HIST_IGNORE_SPACE         # don't record an entry starting with a space.
 
 setopt COMPLETE_ALIASES
 
