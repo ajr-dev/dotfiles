@@ -118,6 +118,10 @@ zstyle ':completion:*' completer _expand _complete _files _correct _approximate
 source "$DOTFILES/zsh/utils.zsh"
 source "$DOTFILES/zsh/prompt.zsh"
 
+# virtualenvwrapper
+[[ -d "$HOME/.local/envs/" ]] || mkdir -p "$HOME/.local/envs/"
+export WORKON_HOME="$HOME/.local/envs"
+
 
 ########################################################
 # Plugin setup

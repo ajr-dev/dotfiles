@@ -185,7 +185,7 @@ call plug#begin('~/.config/nvim/plugged')
 
     " Allow saving files that need sudo privileges
     nmap <leader>W :w !sudo tee % > /dev/null<cr>
-    cmap w! w !sudo tee % > /dev/null<cr>
+    cnoremap w!! execute 'silent! write !sudo tee % > /dev/null' <bar> edit!<cr>
 
     " Set paste toggle
     set pastetoggle=<leader>v
