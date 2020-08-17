@@ -15,4 +15,4 @@ fi
 echo "Installing dotfiles."
 cd "$DOTFILES/install" || exit
 
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ajr-dev/dotfiles/master/install/install.sh)"
+source "$DOTFILES/install/install.sh"
