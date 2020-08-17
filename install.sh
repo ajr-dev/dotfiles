@@ -9,15 +9,15 @@ if ! command_exists git; then
 fi
 
 DOTFILES=$HOME/.dotfiles
+INSTALL=$DOTFILES/install
 if [ ! -d "$DOTFILES" ]; then
     git clone https://github.com/ajr-dev/dotfiles "$DOTFILES"
 fi
 echo "Installing dotfiles."
-cd "$DOTFILES/install" || exit
 
-source link.sh
-
-source git.sh
+cd "$DOTFILES" || exit
+source "$INSTALL/link.sh"
+source "$INSTALL/git.sh"
 
 if ! command_exists brew; then
     echo -e "\\n\\nInstalling homebrew"
@@ -51,7 +51,7 @@ $HOMEBREW_PREFIX/opt/fzf/install --all --no-bash --no-fish
 # perform macOS-specific install
 if [ "$(uname)" == "Darwin" ]; then
     echo -e "\\n\\nRunning on macOS"
-    source osx.sh
+    source "$INSTALL/osx.sh"
 fi
 
 if ! command_exists zsh; then
