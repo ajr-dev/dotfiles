@@ -30,8 +30,7 @@ If on OSX, you will need to install the XCode CLI tools before continuing. To do
 To install the dotfiles do:
 
 ```bash
-git clone https://github.com/ajr-dev/dotfiles.git ~/.dotfiles
-~/.dotfiles/install.sh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ajr-dev/dotfiles/master/install.sh)"
 ```
 
 ### Prompt
