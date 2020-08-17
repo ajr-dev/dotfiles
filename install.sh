@@ -23,6 +23,10 @@ if ! command_exists brew; then
     echo -e "\\n\\nInstalling homebrew"
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 
+    # Add Homebrew to your PATH
+    test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
+    test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+
     # install brew dependencies from Brewfile
     BASEDIR=$(dirname "$0")
     cd "$BASEDIR" || { echo "Directory $BASEDIR not found" ; exit 1; }
@@ -59,6 +63,9 @@ if ! command_exists zsh; then
     exit 1
 fi
 
+nvim +PlugInstall +qall
+tic -x resources/xterm-256color-italic.terminfo
+tic -x resources/tmux.terminfo
 zsh_path="$( command -v zsh )"
 if ! grep "$zsh_path" /etc/shells; then
     echo -e "\\n\\nChanging default shell to zsh"
@@ -72,4 +79,8 @@ if ! [[ $SHELL =~ .*zsh.* ]]; then
 
     zsh # Reload terminal
 fi
-
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+read -rp "You still have to install the tmux plugins with <Prefix>+I"
+if ! command_exists xclip; then
+    read -rp "You still have to install xclip to be able to copy to clipboard in nvim and tmux"
+fi
