@@ -303,6 +303,8 @@ call plug#begin('~/.config/nvim/plugged')
     nmap <leader>s4 :set ts=4 sts=4 sw=4 et \| retab<cr>
     nmap <leader>st :set ts=4 sts=4 sw=4 noet \| retab<cr>
 
+    nnoremap <silent> <leader>u :call functions#HtmlUnEscape()<cr>
+
     command! Rm call functions#Delete()
     command! RM call functions#Delete() <Bar> q!
 
@@ -324,6 +326,9 @@ call plug#begin('~/.config/nvim/plugged')
     nmap <leader>4 <Plug>HiInterestingWord4
     nmap <leader>5 <Plug>HiInterestingWord5
     nmap <leader>6 <Plug>HiInterestingWord6
+
+    " open current buffer in a new tab
+    nmap <silent> gTT :tab sb<cr>
 " }}}
 
 " AutoGroups {{{
@@ -351,6 +356,7 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'tpope/vim-unimpaired'     " mappings which are simply short normal mode aliases for commonly used ex commands
     Plug 'tpope/vim-ragtag'         " endings for html, xml, etc. - ehances surround
     Plug 'tpope/vim-surround'       " mappings to easily delete, change and add such surroundings in pairs, such as quotes, parens, etc.
+    Plug 'benmills/vimux'           " tmux integration for vim
     Plug 'tpope/vim-repeat'         " enables repeating other supported plugins with the . command
     Plug 'editorconfig/editorconfig-vim' " .editorconfig support
     Plug 'tpope/vim-sleuth'         " detect indent style (tabs vs. spaces)

@@ -6,6 +6,10 @@
     user = ajr-dev
 [init]
     templatedir = ~/.dotfiles/git/templates
+[include]
+    # A local gitconfig, outside of version control.
+    # If the file doesn't exist it is silently ignored'
+    path = ~/.gitconfig-local
 [alias]
     # list all aliases
     la = "!git config -l | grep alias | cut -c 7-"

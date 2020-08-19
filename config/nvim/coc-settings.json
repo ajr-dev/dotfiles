@@ -29,9 +29,11 @@
     "explorer.openAction.for.directory": "expandOrCollapse",
     "explorer.previewAction.onHover": false,
     "explorer.keyMappings": {
-        "<cr>": ["expandable?", "expandOrCollapse", "open"]
+        "<cr>": ["expandable?", ["expanded?", "collapse", "expand"], "open"]
     },
-    "eslint.enable": false,
+    "eslint.enable": true,
+    "eslint.autoFixOnSave": false,
+    "eslint.autoFix": false,
     "diagnostic-languageserver.filetypes": {
         "sh": "shellcheck"
     },
