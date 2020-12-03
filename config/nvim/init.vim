@@ -537,7 +537,7 @@ call plug#begin('~/.config/nvim/plugged')
         nmap <silent> ]c <Plug>(coc-diagnostic-next)
 
         " rename
-        nmap <silent> <leader>rn <Plug>(coc-rename)
+        nmap <silent> <leader>c <Plug>(coc-rename)
 
         " Remap for format selected region
         xmap <leader>f  <Plug>(coc-format-selected)
@@ -590,16 +590,16 @@ call plug#begin('~/.config/nvim/plugged')
         Plug 'othree/html5.vim', { 'for': 'html' }      " html5 support
         Plug 'mustache/vim-mustache-handlebars'         " mustache support
         Plug 'digitaltoad/vim-pug', { 'for': ['jade', 'pug'] }  " pug / jade support
-        Plug 'Glench/Vim-Jinja2-Syntax', { 'for': 'njk' } " nunjucks support
+        Plug 'niftylettuce/vim-jinja'                   " nunjucks support
         Plug 'tpope/vim-liquid'                         " liquid support
     " }}}
 
     " JavaScript {{{
         Plug 'othree/yajs.vim', { 'for': [ 'javascript', 'javascript.jsx', 'html' ] }
         Plug 'moll/vim-node', { 'for': 'javascript' }
-                Plug 'ternjs/tern_for_vim', { 'for': ['javascript', 'javascript.jsx'], 'do': 'npm install' }
-                Plug 'MaxMEllon/vim-jsx-pretty'
-                let g:vim_jsx_pretty_highlight_close_tag = 1
+        Plug 'ternjs/tern_for_vim', { 'for': ['javascript', 'javascript.jsx'], 'do': 'npm install' }
+        Plug 'MaxMEllon/vim-jsx-pretty'
+        let g:vim_jsx_pretty_highlight_close_tag = 1
     " }}}
 
     " TypeScript {{{
@@ -608,9 +608,9 @@ call plug#begin('~/.config/nvim/plugged')
 
     " Python {{{
         Plug 'tmhedberg/SimpylFold', { 'for': 'python' } " easy folding
-        Plug 'nvie/vim-flake8', { 'for': 'python' } " PEP8 linting
+        Plug 'nvie/vim-flake8', { 'for': 'python' }      " PEP8 linting
         Plug 'Vimjas/vim-python-pep8-indent'
-        Plug 'vim-python/python-syntax' " Syntax highlighting
+        Plug 'vim-python/python-syntax'                  " Syntax highlighting
         let g:python_highlight_all = 1
         let g:python_highlight_file_headers_as_comments = 1
     " }}}

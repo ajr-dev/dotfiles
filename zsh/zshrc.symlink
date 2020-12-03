@@ -35,12 +35,12 @@ compinit
 prepend_path /usr/local/opt/grep/libexec/gnubin
 prepend_path /usr/local/sbin
 prepend_path $DOTFILES/bin
-prepend_path $HOME/bin
 # It’s a good idea to have this folder on your path because it’s where Python
 # will install things when you use pip install --user
 prepend_path $HOME/.local/bin
+prepend_path $HOME/bin
+prepend_path $HOME/Dropbox/bin
 prepend_path /snap/bin
-eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 
 # WSL
 if  grep -q Microsoft /proc/version;  then
@@ -75,20 +75,21 @@ setopt PROMPT_SUBST
 
 # History
 HISTFILE=~/.zsh_history
-HISTSIZE=10000000
-SAVEHIST=10000000
-setopt BANG_HIST                 # treat the '!' character specially during expansion.
-setopt EXTENDED_HISTORY          # write the history file in the ":start:elapsed;command" format.
-setopt INC_APPEND_HISTORY        # write to the history file immediately, not when the shell exits.
-setopt SHARE_HISTORY             # share history between all sessions.
-setopt HIST_EXPIRE_DUPS_FIRST    # expire duplicate entries first when trimming history.
-setopt HIST_IGNORE_DUPS          # don't record an entry that was just recorded again.
-setopt HIST_IGNORE_ALL_DUPS      # delete old recorded entry if new entry is a duplicate.
-setopt HIST_SAVE_NO_DUPS         # don't write duplicate entries in the history file.
-setopt HIST_REDUCE_BLANKS        # remove superfluous blanks before recording entry.
-setopt HIST_VERIFY               # don't execute immediately upon history expansion.
-# A useful trick to prevent particular entries from being recorded into a history by preceding them with at least one space.
-setopt HIST_IGNORE_SPACE         # don't record an entry starting with a space.
+HISTSIZE=9223372036854775807
+SAVEHIST=9223372036854775807
+setopt BANG_HIST                 # treat the '!' character specially during expansion
+setopt EXTENDED_HISTORY          # write the history file in the format ‘: <beginning time>:<elapsed seconds>;<command>’
+setopt INC_APPEND_HISTORY        # write to the history file immediately, not when the shell exits
+setopt SHARE_HISTORY             # share history between all sessions
+setopt HIST_EXPIRE_DUPS_FIRST    # expire duplicate entries first when trimming history
+setopt HIST_IGNORE_DUPS          # don't record an entry that was just recorded again
+setopt HIST_IGNORE_ALL_DUPS      # delete old recorded entry if new entry is a duplicate
+setopt HIST_SAVE_NO_DUPS         # don't write duplicate entries in the history file
+setopt HIST_FIND_NO_DUPS         # while stepping through the history (with Ctrl+R) don't show duplicates
+setopt HIST_REDUCE_BLANKS        # remove superfluous blanks before recording entry
+setopt HIST_VERIFY               # don't execute immediately upon history expansion
+# A useful trick to prevent particular entries from being recorded into a history by preceding them with at least one space
+setopt HIST_IGNORE_SPACE         # don't record an entry starting with a space
 
 setopt COMPLETE_ALIASES
 
@@ -124,14 +125,9 @@ zstyle ':completion:*' insert-tab pending
 # Default to file completion
 zstyle ':completion:*' completer _expand _complete _files _correct _approximate
 
-# Source all .zsh files inside of the zsh/ directory
-source "$DOTFILES/zsh/utils.zsh"
-source "$DOTFILES/zsh/prompt.zsh"
-
 # virtualenvwrapper
 [[ -d "$HOME/.local/envs/" ]] || mkdir -p "$HOME/.local/envs/"
 export WORKON_HOME="$HOME/.local/envs"
-
 
 ########################################################
 # Plugin setup
@@ -141,12 +137,14 @@ export ZPLUGDIR="$CACHEDIR/zsh/plugins"
 [[ -d "$ZPLUGDIR" ]] || mkdir -p "$ZPLUGDIR"
 typeset -A plugins  # array containing plugin information (managed by zfetch)
 
-zfetch $ZPLUGDIR zsh-users/zsh-syntax-highlighting
-zfetch $ZPLUGDIR zsh-users/zsh-autosuggestions
-zfetch $ZPLUGDIR chriskempson/base16-shell
+zfetch mafredri/zsh-async async.plugin.zsh
+zfetch zsh-users/zsh-syntax-highlighting
+zfetch zsh-users/zsh-autosuggestions
+zfetch chriskempson/base16-shell
+zfetch Aloxaf/fzf-tab
+
 if [[ -x "$(command -v fnm)" ]]; then
-    eval "$(fnm env --multi --use-on-cd)"
-    export FNM_LOADED=1
+    eval "$(fnm env --use-on-cd)"
 fi
 
 [[ -e ~/.terminfo ]] && export TERMINFO_DIRS=~/.terminfo:/usr/share/terminfo
@@ -165,11 +163,6 @@ export RIPGREP_CONFIG_PATH="$HOME/.rgrc"    # add a config file for ripgrep
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow -g "!{.git,node_modules}/*" 2> /dev/null'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
-# alias git to hub
-if type hub > /dev/null 2>&1; then
-    #eval "$(hub alias -s)"
-fi
-
 # add color to man pages
 export MANROFFOPT='-c'
 export LESS_TERMCAP_mb=$(tput bold; tput setaf 2)
@@ -184,7 +177,7 @@ export LESS_TERMCAP_mh=$(tput dim)
 
 # source z.sh if it exists
 zpath="$(brew --prefix)/etc/profile.d/z.sh"
-if  -f "[$zpath" ]; then
+if [ -f "[$zpath" ]; then
     source "$zpath"
 fi
 
@@ -238,5 +231,13 @@ alias clsym="find -L . -name . -o -type d -prune -o -type l -exec rm {} +"
 alias gs='git s'
 alias glog="git l"
 
-# recursively source all .zsh files inside the plugins directory
+ # List the PATH separated by new lines
+alias lpath='echo $PATH | tr ":" "\n"'
+
+alias nr="npm run"
+
+source "$DOTFILES/zsh/utils.zsh"
+source "$DOTFILES/zsh/prompt.zsh"
+
+# Recursively source all .zsh files inside the plugins directory
 for config ($ZSH/plugins/**/*.zsh) source $config

@@ -126,9 +126,6 @@ setup_symlinks() {
 setup_git() {
     title "Setting up Git"
 
-    if test ! "$(command -v brew)"; then
-        read -rp "Install git"
-
     defaultName=$(git config user.name)
     defaultEmail=$(git config user.email)
     defaultGithub=$(git config github.user)
