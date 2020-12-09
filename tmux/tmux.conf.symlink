@@ -66,7 +66,7 @@ bind l select-pane -R
 bind -r C-h select-window -t :-
 bind -r C-l select-window -t :+
 
-# Pressing Ctrl+Shift+Left (will move the current window to the left.
+# Pressing Ctrl+Shift+Left will move the current window to the left.
 # Similarly right. No need to use the prefix
 bind-key -n C-S-Left swap-window -t -1
 bind-key -n C-S-Right swap-window -t +1

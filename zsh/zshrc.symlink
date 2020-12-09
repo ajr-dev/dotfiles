@@ -63,14 +63,14 @@ if [[ -d ~/Dropbox/code ]]; then
     export CODE_DIR=~/Dropbox/code
 fi
 
-export REPORTTIME=10    # display how long all tasks over 10 seconds take
-export KEYTIMEOUT=1     # 10ms delay for key sequences
+export REPORTTIME=10             # display how long all tasks over 10 seconds take
+export KEYTIMEOUT=1              # 10ms delay for key sequences
 
-setopt NO_BG_NICE
+# setopt NO_BG_NICE              # don't give less priority to background jobs
 setopt NO_HUP                    # don't kill background jobs when the shell exits
 setopt NO_LIST_BEEP
-setopt LOCAL_OPTIONS
-setopt LOCAL_TRAPS
+setopt LOCAL_OPTIONS             # allow functions to have local options
+setopt LOCAL_TRAPS               # allow functions to have local traps
 setopt PROMPT_SUBST
 
 # History

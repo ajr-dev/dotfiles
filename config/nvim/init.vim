@@ -282,7 +282,7 @@ call plug#begin('~/.config/nvim/plugged')
     vnoremap $< <esc>`>a><esc>`<i<<esc>
 
     " Toggle cursor line
-    nnoremap <leader>cl :set cursorline!<cr>
+    nnoremap <leader>i :set cursorline!<cr>
 
     " Scroll the viewport faster
     nnoremap <C-e> 3<C-e>
