@@ -2,8 +2,15 @@
 set -g default-terminal "tmux-256color"
 set -as terminal-overrides ',xterm*:Tc:sitm=\E[3m'
 
-set -g history-limit 20000
-set -g renumber-windows on      # automatically renumber tmux windows
+# Scroll history
+set -g history-limit 50000
+
+# Automatically renumber tmux windows
+set -g renumber-windows on
+
+# Set first window/pane to index 1
+set -g base-index 1
+setw -g pane-base-index 1
 
 set -g prefix C-a               # set prefix to Ctrl+a
 bind C-a send-prefix            # ensure that we can send Ctrl-a to other apps
@@ -20,47 +27,60 @@ set -g visual-activity off
 # client connected to *that window*. Much more reasonable.
 setw -g aggressive-resize on
 
-# make delay shorter
+# Lower escape timing for quicker response to scroll-buffer access
 set -sg escape-time 0
 
-# tile all windows
+# Tile all windows
 unbind =
 bind = select-layout tiled
 
-# cycle through panes
-# unbind C-a
-# unbind o # this is the default key for cycling panes
-# bind ^A select-pane -t:.+
+#######################
+#### Mouse Support ####
+#######################
 
-# make window/pane index start with 1
-set -g base-index 1
-setw -g pane-base-index 1
+# Enable mouse support for switching panes/windows
+setw -g mouse on
+
+# Drag to re-order windows
+bind -n MouseDrag1Status swap-window -t=
+
+# Double click on the window list to open a new window
+bind-key -n DoubleClick1Status new-window
 
 ######################
 #### Key Bindings ####
 ######################
 
-bind-key e split-window -h vim ~/.tmux.conf   # edit configuration file
+# Edit configuration file
+bind-key e split-window -h vim ~/.tmux.conf
 bind r source-file ~/.tmux.conf \; display "Tmux configuration reloaded"
 
-bind N new-window               # quickly open a new window
+# Synchronize all panes in a window
+bind y setw synchronize-panes
+
+# Quickly open a new window
+bind N new-window
 
 # Delete window and pane without confirmation
 bind-key & kill-window
 bind-key q kill-window
 bind-key x kill-pane
 
-# split window and fix path for tmux 1.9
+# Split window and fix path for tmux 1.9
 bind | split-window -h -c "#{pane_current_path}"
 bind - split-window -v -c "#{pane_current_path}"
-
-bind y setw synchronize-panes   # synchronize all panes in a window
 
 # Pane movement shortcuts
 bind h select-pane -L
 bind j select-pane -D
 bind k select-pane -U
 bind l select-pane -R
+
+# Resize pane shortcuts
+bind -r H resize-pane -L 10
+bind -r J resize-pane -D 10
+bind -r K resize-pane -U 10
+bind -r L resize-pane -R 10
 
 # Move through the windows
 bind -r C-h select-window -t :-
@@ -70,35 +90,65 @@ bind -r C-l select-window -t :+
 # Similarly right. No need to use the prefix
 bind-key -n C-S-Left swap-window -t -1
 bind-key -n C-S-Right swap-window -t +1
-bind-key -n C-S-h swap-window -t -1
-bind-key -n C-S-l swap-window -t +1
 
-# Resize pane shortcuts
-bind -r H resize-pane -L 10
-bind -r J resize-pane -D 10
-bind -r K resize-pane -U 10
-bind -r L resize-pane -R 10
+###############
+### Vi Mode ###
+###############
 
-# enable mouse support for switching panes/windows
-setw -g mouse on
-
-# set vi mode for copy mode
+# Set vi mode for copy mode
 setw -g mode-keys vi
-# more settings to make copy-mode more vim-like
+
+# More settings to make copy-mode more vim-like
 unbind [
 bind Escape copy-mode
 unbind p
 bind p paste-buffer
-bind -Tcopy-mode-vi 'v' send -X begin-selection
-bind-key -T copy-mode-vi 'C-v' send -X rectangle-toggle
-bind-key -T copy-mode-vi y send -X copy-pipe-and-cancel 'xclip -selection clipboard -in'
+
+#############################
+### Clipboard integration ###
+#############################
+
+bind -T copy-mode-vi v send -X begin-selection
+
+if-shell 'uname | grep -q Darwin' {
+    bind C-c run 'tmux save-buffer - | reattach-to-user-namespace pbcopy'; \
+    bind C-v run 'tmux set-buffer $(reattach-to-user-namespace pbpaste); tmux paste-buffer'
+
+    # Copy to system clipboard
+    bind -T copy-mode-vi y send -X copy-pipe-and-cancel 'tmux save-buffer - | reattach-to-user-namespace pbcopy'; \
+    bind -T copy-mode-vi C-v send -X rectangle-toggle \; send -X begin-selection; \
+
+    # Selection with mouse should copy to clipboard right away, in addition to the default action.
+    unbind -n -T copy-mode-vi MouseDragEnd1Pane; \
+    bind -T copy-mode-vi MouseDragEnd1Pane send -X copy-selection-and-cancel\; run 'tmux save-buffer - | reattach-to-user-namespace pbcopy > /dev/null'; \
+
+    # Middle click to paste from the clipboard
+    unbind MouseDown2Pane; \
+    bind -n MouseDown2Pane run 'tmux set-buffer $(reattach-to-user-namespace pbpaste); tmux paste-buffer'
+}
+
+if-shell '[[ $(uname -s) = Linux ]]' {
+    bind C-c run "tmux save-buffer - | xclip -selection clipboard -in"; \
+    bind C-v run 'tmux set-buffer $(xclip -selection clipboard -out); tmux paste-buffer'; \
+
+    # Copy to system clipboard
+    bind -T copy-mode-vi y send -X copy-pipe-and-cancel 'xclip -selection clipboard -in'; \
+    bind -T copy-mode-vi C-v send -X rectangle-toggle \; send -X begin-selection; \
+
+\   # Selection with mouse should copy to clipboard right away, in addition to the default action.
+    unbind -n -T copy-mode-vi MouseDragEnd1Pane; \
+    bind -T copy-mode-vi MouseDragEnd1Pane send -X copy-selection-and-cancel\; run 'tmux save-buffer - | xclip -selection clipboard -in > /dev/null'; \
+
+    # Middle click to paste from the clipboard
+    unbind MouseDown2Pane; \
+    bind -n MouseDown2Pane run 'tmux set-buffer $(xclip -o -sel clipboard); tmux paste-buffer'
+}
 
 ##############################
 ### Color & Style Settings ###
 ##############################
-
 if-shell 'uname | grep -q Darwin' \
-    'source-file ~/.dotfiles/tmux/tmux-osx.conf'
+    'source ~/.dotfiles/tmux/base16.sh'
 
 # Extensions
 set -g @plugin 'tmux-plugins/tpm'
