@@ -1,3 +1,5 @@
+export LANG=en_US.UTF-8
+
 export DOTFILES="$HOME/.dotfiles"
 export MYZSH="$DOTFILES/zsh"
 export LOCALRC="$HOME/.localrc"
@@ -6,12 +8,14 @@ export VIM_TMP="$HOME/.vim-tmp"
 
 export EDITOR='nvim'
 export GIT_EDITOR='nvim'
+export PAGER='less'
 export MYVIMRC="$DOTFILES/config/nvim/init.vim"
 export MYTMUX="$DOTFILES/tmux/tmux.conf.symlink"
 export NVM_DIR="$HOME/.nvm"
 export GPG_TTY=$(tty)
 export PYENV_ROOT="$HOME/.pyenv"
 export GOPATH="$HOME/go"
+export XDG_CONFIG_HOME="$HOME/.config"
 
 [[ -d "$CACHEDIR" ]] || mkdir -p "$CACHEDIR"
 [[ -d "$VIM_TMP" ]] || mkdir -p "$VIM_TMP"

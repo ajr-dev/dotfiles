@@ -9,7 +9,7 @@ export ZSH_CUSTOM="$MYZSH/custom"
 export REPORTTIME=10  # display how long all tasks over 10 seconds take
 export KEYTIMEOUT=1   # 10ms delay for key sequences
 
-function prepend_path() {
+function add_path() {
     if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
         PATH=(
             $1
@@ -31,18 +31,25 @@ if [ -d $ZSH_CUSTOM/functions ]; then
   for func in $ZSH_CUSTOM/functions/*(:t); autoload -U $func
 fi
 
-prepend_path /usr/local/opt/grep/libexec/gnubin
-prepend_path /usr/local/bin
-prepend_path /usr/local/sbin
-prepend_path $DOTFILES/bin
+add_path "/usr/local/opt/grep/libexec/gnubin"
+add_path "/usr/local/bin"
+add_path "/usr/local/sbin"
+add_path "$DOTFILES/bin"
 # For python packages installed with the '--user' option
-prepend_path $HOME/.local/bin
-prepend_path $HOME/bin
-prepend_path $HOME/.cargo/bin
-prepend_path $HOME/Dropbox/bin
-prepend_path $PYENV_ROOT/bin
-prepend_path $GOPATH/bin
-prepend_path /snap/bin
+add_path "$HOME/.local/bin"
+add_path "$HOME/bin"
+add_path "$HOME/.cargo/bin"
+add_path "$HOME/Dropbox/bin"
+add_path "$PYENV_ROOT/bin"
+add_path "$GOPATH/bin"
+add_path "$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin"
+add_path "$HOME/.rvm/bin"
+add_path "$HOME/.rbenv/bin"
+add_path "$ANDROID_HOME/platform_tools"
+add_path "$ANDROID_HOME/tools"
+add_path "$ANDROID_HOME/tools/bin"
+add_path "$ANDROID_HOME/emulator"
+add_path "/snap/bin"
 
 if [[ "$(uname)" == "Linux" ]]; then
     export HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew";
