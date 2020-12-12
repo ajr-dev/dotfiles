@@ -150,7 +150,7 @@ setup_git() {
     fi
 }
 
-setup_homebrew() {
+setup_brew() {
     title "Setting up Homebrew"
 
     if test ! "$(command -v brew)"; then
@@ -268,8 +268,8 @@ case "$1" in
     git)
         setup_git
         ;;
-    homebrew)
-        setup_homebrew
+    brew)
+        setup_brew
         ;;
     shell)
         setup_shell
