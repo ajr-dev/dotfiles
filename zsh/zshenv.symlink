@@ -1,17 +1,17 @@
 export DOTFILES="$HOME/.dotfiles"
+export MYZSH="$DOTFILES/zsh"
+export LOCALRC="$HOME/.localrc"
 export CACHEDIR="$HOME/.local/share"
 export VIM_TMP="$HOME/.vim-tmp"
 
-[[ -d "$CACHEDIR" ]] || mkdir -p "$CACHEDIR"
-[[ -d "$VIM_TMP" ]] || mkdir -p "$VIM_TMP"]]
-
-fpath=(
-    $DOTFILES/zsh/functions
-    /usr/local/share/zsh/site-functions
-    $fpath
-)
-
-typeset -aU path
-
 export EDITOR='nvim'
 export GIT_EDITOR='nvim'
+export MYVIMRC="$DOTFILES/config/nvim/init.vim"
+export MYTMUX="$DOTFILES/tmux/tmux.conf.symlink"
+export NVM_DIR="$HOME/.nvm"
+export GPG_TTY=$(tty)
+export PYENV_ROOT="$HOME/.pyenv"
+export GOPATH="$HOME/go"
+
+[[ -d "$CACHEDIR" ]] || mkdir -p "$CACHEDIR"
+[[ -d "$VIM_TMP" ]] || mkdir -p "$VIM_TMP"

@@ -1,10 +1,12 @@
-export DOTFILES="$HOME/.dotfiles"
-export ZSH="$DOTFILES/zsh"
-#export ZSH_CACHE_DIR="$HOME/.local/share/.zsh/cache"
+source "$MYZSH/exports.zsh"
 
 # ==============================================================================
 # Oh-my-zsh Configuration
 # ==============================================================================
+# Install Oh-my-zsh
+if [ ! -d "$ZSH" ]; then
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --keep-zshrc
+fi
 
 # Disable Oh-my-zsh themes
 ZSH_THEME=""
@@ -13,74 +15,29 @@ ZSH_THEME=""
 HIST_STAMPS="%Y-%m-%d %H:%M:%S"
 
 # Select the plugins you want
-plugins=(common-aliases git tmux extract)
+plugins=(common-aliases git tmux extract colored-man-pages)
 
-source "$ZSH/oh-my-zsh.sh"
-
-# ==============================================================================
-# User configuration to overwrite Oh-My-Zsh
-# ==============================================================================
-export MYVIMRC="$DOTFILES/config/nvim/init.vim"
-export MYTMUX="$DOTFILES/tmux/tmux.conf.symlink"
-export NVM_DIR="$HOME/.nvm"
-export GOPATH="$HOME/go"
-export EDITOR='nvim'             # set default editor
-export REPORTTIME=10             # display how long all tasks over 10 seconds take
-export KEYTIMEOUT=1              # 10ms delay for key sequences
-
-# WSL
-if  grep -q Microsoft /proc/version;  then
-    export DISPLAY=:0
-fi
-
-# This is where my code exists and where I want
-# the `c` autocomplete to work from exclusively
-if [[ -d ~/Dropbox/code ]]; then
-    export CODE_DIR=~/Dropbox/code
-fi
-
-# Disable control flow (ctrl-s / ctrl-q)
-stty stop '' -ixoff -ixon
+source "$MYZSH/oh-my-zsh.sh"
 
 # ==============================================================================
-# Plugins
+# Plugins Configuration
 # ==============================================================================
-export ZPLUG_HOME=$HOME/.zplug
-export ZPLUGDIR="$CACHEDIR/zsh/plugins"
-[[ -d "$ZPLUGDIR" ]] || mkdir -p "$ZPLUGDIR"
-
-# Check if zplug is installed
-if [[ ! -d $ZPLUG_HOME ]]; then
-    git clone https://github.com/zplug/zplug $ZPLUG_HOME
-    source $ZPLUG_HOME/init.zsh && zplug update --self
-else
-    source $ZPLUG_HOME/init.zsh
-fi
-
-zplug "zplug/zplug", hook-build:"zplug --self-manage"
-zplug "mafredri/zsh-async", from:"github", use:"async.zsh"
-zplug "sindresorhus/pure", use:"pure.zsh", from:"github", as:"theme"
-zplug "zsh-users/zsh-completions",              defer:0
-zplug "zsh-users/zsh-autosuggestions",          defer:2, on:"zsh-users/zsh-completions"
-zplug "zsh-users/zsh-syntax-highlighting",      defer:3, on:"zsh-users/zsh-autosuggestions"
-zplug "zsh-users/zsh-history-substring-search", defer:3, on:"zsh-users/zsh-syntax-highlighting"
-#zfetch Aloxaf/fzf-tab  # TODO: add comment
-
-# If an alias exists for a command you write, it prints the alias to remember it
-zplug "djui/alias-tips"
+source "$MYZSH/plugins.zsh"
 
 # Force the use of aliases
 export ZSH_PLUGINS_ALIAS_TIPS_FORCE=1
 
-zplug "plugins/git", from:oh-my-zsh
-
-# Install plugins if there are plugins that have not been installed
-if ! zplug check --verbose; then
-    printf "Install? [y/N]: "
-    if read -q; then
-        echo; zplug install
-    fi
-fi
-
-# Then, source plugins and add commands to $PATH
+# Source plugins and add commands to $PATH
 zplug load
+
+# ==============================================================================
+# User configuration at the end to overwrite plugins
+# ==============================================================================
+
+# Disable control flow (ctrl-s / ctrl-q)
+stty stop '' -ixoff -ixon
+
+# Import local configuration
+if [[ -a "$LOCALRC" ]]; then
+    source "$LOCALRC"
+fi

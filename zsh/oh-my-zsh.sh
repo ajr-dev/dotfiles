@@ -7,6 +7,10 @@ if [[ -z "$ZSH_CACHE_DIR" ]]; then
   ZSH_CACHE_DIR="$ZSH/cache"
 fi
 
+if [ ! -d "$ZSH_CACHE_DIR" ]; then
+  mkdir -p "$ZSH_CACHE_DIR"
+fi
+
 # Check for updates on initial load...
 if [ "$DISABLE_AUTO_UPDATE" != "true" ]; then
   source $ZSH/tools/check_for_upgrade.sh
@@ -23,9 +27,8 @@ autoload -U compaudit compinit
 # Set ZSH_CUSTOM to the path where your custom config files
 # and plugins exists, or else we will use the default custom/
 if [[ -z "$ZSH_CUSTOM" ]]; then
-    ZSH_CUSTOM="$ZSH/custom"
+  ZSH_CUSTOM="$ZSH/custom"
 fi
-
 
 is_plugin() {
   local base_dir=$1
