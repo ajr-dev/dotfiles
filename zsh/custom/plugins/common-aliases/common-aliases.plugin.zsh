@@ -64,7 +64,7 @@ alias timer='echo "Timer started. Stop with Ctrl-D." && date && time cat && date
 alias o='xdg-open'
 alias open='xdg-open'
 alias weather='curl wttr.in'
-# Do something and receive a desktop alert when it completes `sudo apt-get install something | alert`
+# Do something and receive a desktop alert when it completes `command | alert`
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 alias dot="cd $HOME/$DOTFILES"
 alias home='cd ~'
@@ -120,7 +120,6 @@ alias sselastic='sudo service elasticsearch start'
 # ------------------------------------------
 # Applications
 # ------------------------------------------
-alias d='docker'
 alias lg='lazygit'
 alias top='htop'
 alias e="$EDITOR"

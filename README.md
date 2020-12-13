@@ -17,9 +17,11 @@
 
 # Dotfiles
 
-This is a collection of vim, tmux, and zsh configurations. Interested in a video walkthrough of the dotfiles? Check out [vim + tmux](https://www.youtube.com/watch?v=5r6yzFEXajQ).
+This is a collection of neovim, tmux, and zsh configurations. Interested in a video walkthrough of the dotfiles? Check out [vim + tmux](https://www.youtube.com/watch?v=5r6yzFEXajQ).
 
-Obviously this setup works for me, a JavaScript developer on macOS, but this particular setup may not work for you. If this particular setup doesn't work for you, please steal ideas from this and contribute back tips, tricks, PRs, and other tidbits if you want!
+If this particular setup doesn't work for you, please steal ideas from this and contribute back tips, tricks, PRs, and other tidbits if you want!
+
+![A screenshot of the dotfiles setup](screenshot.png)
 
 ### Installation
 
