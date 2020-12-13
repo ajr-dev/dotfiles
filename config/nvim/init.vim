@@ -355,6 +355,7 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'tpope/vim-commentary'     " easy commenting motions
     Plug 'tpope/vim-unimpaired'     " mappings which are simply short normal mode aliases for commonly used ex commands
     Plug 'tpope/vim-ragtag'         " endings for html, xml, etc. - ehances surround
+    Plug 'https://github.com/adelarsq/vim-matchit'  " extend matching
     Plug 'tpope/vim-surround'       " mappings to easily delete, change and add such surroundings in pairs, such as quotes, parens, etc.
     Plug 'benmills/vimux'           " tmux integration for vim
     Plug 'tpope/vim-repeat'         " enables repeating other supported plugins with the . command

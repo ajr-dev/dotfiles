@@ -1,8 +1,4 @@
 # Changing/making/removing directory
-setopt autopushd            # make cd push the old directory onto the directory stack
-setopt pushd_ignore_dups    # don’t push multiple copies of the same directory onto the directory stack
-setopt pushdminus           # exchanges the meanings of ‘+’ and ‘-’ when used with a number to specify a directory in the stack
-
 alias -g ...='../..'
 alias -g ....='../../..'
 alias -g .....='../../../..'

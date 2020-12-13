@@ -15,7 +15,7 @@ ZSH_THEME=""
 HIST_STAMPS="%Y-%m-%d %H:%M:%S"
 
 # Select the plugins you want
-plugins=(common-aliases git tmux extract colored-man-pages)
+plugins=(common-aliases git tmux systemadmin extract colored-man-pages)
 
 source "$MYZSH/oh-my-zsh.sh"
 
@@ -33,9 +33,6 @@ zplug load
 # ==============================================================================
 # User configuration at the end to overwrite plugins
 # ==============================================================================
-
-# Disable control flow (ctrl-s / ctrl-q)
-stty stop '' -ixoff -ixon
 
 # Import local configuration
 if [[ -a "$LOCALRC" ]]; then

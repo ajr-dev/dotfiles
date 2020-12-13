@@ -64,10 +64,6 @@ if command diff --color . . &>/dev/null; then
   alias diff='diff --color'
 fi
 
-setopt auto_cd
-setopt multios
-setopt prompt_subst
-
 [[ -n "$WINDOW" ]] && SCREEN_NO="%B$WINDOW%b " || SCREEN_NO=""
 
 # git theming default: Variables for theming the git info prompt

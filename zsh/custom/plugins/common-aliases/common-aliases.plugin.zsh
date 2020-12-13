@@ -77,8 +77,11 @@ alias ev="$EDITOR $MYVIMRC"  # edit vimrc
 alias et="$EDITOR $MYTMUX"  # edit tmux.conf
 
 # Reload zsh configuration
-alias sz='source ~/.zshrc'
-alias reload='source ~/.zshrc'
+function reload() {
+    zsh -f
+    source ~/.zshrc
+}
+alias sz=reload
 
 (( $+commands[fd] )) || alias fd='find . -type d -name'  # find a directory with the given name
 alias ff='find . -type f -name'  # find a file with the given name

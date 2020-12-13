@@ -55,8 +55,8 @@ if [[ "$(uname)" == "Linux" ]]; then
     export HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew";
     export HOMEBREW_CELLAR="$HOMEBREW_PREFIX/Cellar";
     export HOMEBREW_REPOSITORY="$HOMEBREW_PREFIX/Homebrew";
-    prepend_path "$HOMEBREW_PREFIX/bin"
-    prepend_path "$HOMEBREW_PREFIX/sbin"
+    add_path "$HOMEBREW_PREFIX/bin"
+    add_path "$HOMEBREW_PREFIX/sbin"
     export MANPATH="$HOMEBREW_PREFIX/share/man${MANPATH+:$MANPATH}:";
     export INFOPATH="$HOMEBREW_PREFIX/share/info:${INFOPATH}";
 fi
