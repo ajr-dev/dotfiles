@@ -1,12 +1,13 @@
 if ! (( $+commands[tmux] )); then
-    print "zsh tmux plugin: tmux not found. Please install tmux before using this plugin." >&2
+    script=`realpath $0`
+    print "$script: tmux not found. Please install tmux before using this plugin." >&2
     return 1
 fi
 
 # ALIASES
 
 # TODO: improve tla to list all aliases of tmux shortcuts
-alias tla="grep -E '(=)' $MY_ZSH/tmux.zsh | less"  # list formatted aliases and descriptions
+alias tla="grep -E '(=)' $MYZSH/tmux.zsh | less"  # list formatted aliases and descriptions
 alias t='tmux'
 alias tls='tmux list-sessions'                  # list tmux sessions
 alias ta='tmux attach'                          # attach to the first session

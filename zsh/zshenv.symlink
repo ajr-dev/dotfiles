@@ -4,11 +4,15 @@ export DOTFILES="$HOME/.dotfiles"
 export MYVIMRC="$DOTFILES/config/nvim/init.vim"
 export MYTMUX="$DOTFILES/tmux/tmux.conf.symlink"
 
-export ZSH="$HOME/.oh-my-zsh"
 export MYZSH="$DOTFILES/zsh"
 export LOCALRC="$HOME/.localrc"
 export CACHEDIR="$HOME/.local/share"
 export VIM_TMP="$HOME/.vim-tmp"
+
+# Oh-my-zsh
+export ZSH="$HOME/.oh-my-zsh"
+export ZSH_CUSTOM="$MYZSH/custom"
+# export ZSH_CACHE_DIR="$CACHEDIR/.zsh/cache"
 
 export EDITOR='nvim'
 export GIT_EDITOR='nvim'
