@@ -6,13 +6,12 @@ set -as terminal-overrides ',xterm*:Tc:sitm=\E[3m'
 set -g history-limit 50000
 
 # Set first window/pane to index 1
-set -g base-index 1           # start windows numbering at 1
-setw -g pane-base-index 1     # make pane numbering consistent with windows
+set -g base-index 1           # Start windows numbering at 1
+setw -g pane-base-index 1     # Make pane numbering consistent with windows
 
 # Set prefix to ctrl+a
 unbind C-b
 set -g prefix C-a
-set -g prefix C-Space
 
 # Faster command sequences
 set -sg escape-time 0
@@ -45,9 +44,8 @@ set -g status-interval 1
 
 set -g focus-events on
 
-# Ensure that we can send Ctrl-a to other apps
+# Ensure that we can send [Ctrl-A] to other apps
 bind C-a send-prefix
-bind C-Space send-prefix
 
 # For nested tmux sessions
 bind a send-prefix
@@ -116,21 +114,24 @@ bind -r K resize-pane -U 5
 bind -r L resize-pane -R 5
 
 # Move through the windows
-bind -r C-h previous-window # select previous window
-bind -r C-l next-window     # select next window
-bind tab last-window        # move to last active window
+bind -r C-h previous-window    # Select previous window
+bind -r C-l next-window        # Select next window
 
-# Pressing Ctrl+Shift+Left will move the current window to the left.
+# Move through the windows. Without prefix
+bind -n S-Right next-window    # [Shift-Right] Select next window
+bind -n S-Left previous-window # [Shift-Left] Select previous window
+bind tab last-window           # Move to last active window
+
+# Pressing [Ctrl-Shift-Left] will move the current window to the left.
 # Similarly right. No need to use the prefix
-bind -n S-Right next-window
-bind -n S-Left previous-window
 bind -n C-S-Right swap-window -t +1
 bind -n C-S-Left swap-window -t -1
 
-bind > swap-pane -D       # swap current pane with the next one
-bind < swap-pane -U       # swap current pane with the previous one
+bind > swap-pane -D       # Swap current pane with the next one
+bind < swap-pane -U       # Swap current pane with the previous one
 
-bind -n C-l send-keys C-l \; run 'sleep 0.1' \; clear-history
+# Clear history with [Control-l]
+# bind -n C-l send-keys C-l \; run 'sleep 0.1' \; clear-history
 
 # ==============================================================================
 # Vi Mode
@@ -145,7 +146,7 @@ bind Escape copy-mode
 bind Enter copy-mode
 unbind p
 bind p paste-buffer
-bind b list-buffers  # list paste buffers
+bind b list-buffers  # List paste buffers
 
 # ==============================================================================
 # Color & Style Settings
@@ -172,7 +173,7 @@ set -g @tpm_plugins '               \
      odedlaz/tmux-onedark-theme     \
 '
 set -g @continuum-boot 'on'  # Tmux is automatically started after the computer is turned on. This doesn't start a terminal with tmux
-set -g @continuum-restore 'on'  # last saved environment is automatically restored when tmux is started
+set -g @continuum-restore 'on'  # Last saved environment is automatically restored when tmux is started
 #set -g @continuum-save-interval '0'  # stop automatic saving
 # Restore vim and neovim sessions if Session.vim file is present
 set -g @resurrect-dir '~/Dropbox/.tmux-resurrect/'

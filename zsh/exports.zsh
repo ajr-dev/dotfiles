@@ -4,14 +4,10 @@
 export REPORTTIME=10  # display how long all tasks over 10 seconds take
 export KEYTIMEOUT=1   # 10ms delay for key sequences
 
-function pathprepend() {
-  for ((i=$#; i>0; i--)); 
-  do
-    ARG=${!i}
-    if [ -d "$ARG" ] && [[ ":$PATH:" != *":$ARG:"* ]]; then
-      PATH="$ARG${PATH:+":$PATH"}"
-    fi
-  done
+function pathadd() {
+if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
+    PATH="${PATH:+"$PATH:"}$1"
+fi
 }
 
 fpath=(
@@ -27,31 +23,31 @@ if [ -d $ZSH_CUSTOM/functions ]; then
   for func in $ZSH_CUSTOM/functions/*(:t); autoload -U $func
 fi
 
-pathprepend "/usr/local/opt/grep/libexec/gnubin"
-pathprepend "/usr/local/bin"
-pathprepend "/usr/local/sbin"
-pathprepend "$DOTFILES/bin"
-pathprepend "$HOME/.local/bin"  # For python packages installed with the '--user' option
-pathprepend "$HOME/bin"
-pathprepend "$HOME/.cargo/bin"
-pathprepend "$HOME/Dropbox/bin"
-pathprepend "$PYENV_ROOT/bin"
-pathprepend "$GOPATH/bin"
-pathprepend "$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin"
-pathprepend "$HOME/.rvm/bin"
-pathprepend "$HOME/.rbenv/bin"
-pathprepend "$ANDROID_HOME/platform_tools"
-pathprepend "$ANDROID_HOME/tools"
-pathprepend "$ANDROID_HOME/tools/bin"
-pathprepend "$ANDROID_HOME/emulator"
-pathprepend "/snap/bin"
+pathadd "/usr/local/opt/grep/libexec/gnubin"
+pathadd "/usr/local/bin"
+pathadd "/usr/local/sbin"
+pathadd "$DOTFILES/bin"
+pathadd "$HOME/.local/bin"  # For python packages installed with the '--user' option
+pathadd "$HOME/bin"
+pathadd "$HOME/.cargo/bin"
+pathadd "$HOME/Dropbox/bin"
+pathadd "$PYENV_ROOT/bin"
+pathadd "$GOPATH/bin"
+pathadd "$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin"
+pathadd "$HOME/.rvm/bin"
+pathadd "$HOME/.rbenv/bin"
+pathadd "$ANDROID_HOME/platform_tools"
+pathadd "$ANDROID_HOME/tools"
+pathadd "$ANDROID_HOME/tools/bin"
+pathadd "$ANDROID_HOME/emulator"
+pathadd "/snap/bin"
 
 if [[ "$(uname)" == "Linux" ]]; then
   export HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew";
   export HOMEBREW_CELLAR="$HOMEBREW_PREFIX/Cellar";
   export HOMEBREW_REPOSITORY="$HOMEBREW_PREFIX/Homebrew";
-  pathprepend "$HOMEBREW_PREFIX/bin"
-  pathprepend "$HOMEBREW_PREFIX/sbin"
+  pathadd "$HOMEBREW_PREFIX/bin"
+  pathadd "$HOMEBREW_PREFIX/sbin"
   export MANPATH="$HOMEBREW_PREFIX/share/man${MANPATH+:$MANPATH}:";
   export INFOPATH="$HOMEBREW_PREFIX/share/info:${INFOPATH}";
 fi

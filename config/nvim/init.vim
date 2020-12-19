@@ -192,6 +192,8 @@ call plug#begin('~/.config/nvim/plugged')
 
     " Fast edit of config files
     map <leader>ev :e! $MYVIMRC<cr>
+    map <leader>ez :e! ~/.zshrc<cr>
+    map <leader>et :e! ~/.tmux.conf<cr>
     map <leader>eg :e! ~/.gitconfig<cr>
 
     " Activate spell-checking alternatives
