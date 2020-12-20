@@ -9,33 +9,33 @@ COLOR_PURPLE="\033[1;35m"
 COLOR_YELLOW="\033[1;33m"
 COLOR_NONE="\033[0m"
 
-title() {
+function title() {
     echo -e "\n${COLOR_PURPLE}$1${COLOR_NONE}"
     echo -e "${COLOR_GRAY}==============================${COLOR_NONE}\n"
 }
 
-error() {
+function error() {
     echo -e "${COLOR_RED}Error: ${COLOR_NONE}$1"
     exit 1
 }
 
-warning() {
+function warning() {
     echo -e "${COLOR_YELLOW}Warning: ${COLOR_NONE}$1"
 }
 
-info() {
+function info() {
     echo -e "${COLOR_BLUE}Info: ${COLOR_NONE}$1"
 }
 
-success() {
+function success() {
     echo -e "${COLOR_GREEN}$1${COLOR_NONE}"
 }
 
-get_linkables() {
+function get_linkables() {
     find -H "$DOTFILES" -maxdepth 3 -name '*.symlink'
 }
 
-backup() {
+function backup() {
     BACKUP_DIR=$HOME/dotfiles-backup
 
     echo "Creating backup directory at $BACKUP_DIR"
@@ -63,7 +63,7 @@ backup() {
 }
 
 
-setup_symlinks() {
+function setup_symlinks() {
     title "Creating symlinks"
 
     if [ ! -e "$HOME/.dotfiles" ]; then
@@ -123,7 +123,7 @@ setup_symlinks() {
     done
 }
 
-setup_git() {
+function setup_git() {
     title "Setting up Git"
 
     defaultName=$(git config user.name)
@@ -150,7 +150,7 @@ setup_git() {
     fi
 }
 
-setup_brew() {
+function setup_brew() {
     title "Setting up Homebrew"
 
     if test ! "$(command -v brew)"; then
@@ -283,13 +283,13 @@ case "$1" in
     all)
         setup_symlinks
         setup_terminfo
-        setup_homebrew
+        setup_brew
         setup_shell
         setup_git
         setup_macos
         ;;
     *)
-        echo -e $"\nUsage: $(basename "$0") {backup|link|git|homebrew|shell|terminfo|macos|all}\n"
+        echo -e $"\nUsage: $(basename "$0") {backup|link|git|brew|shell|terminfo|macos|all}\n"
         exit 1
         ;;
 esac

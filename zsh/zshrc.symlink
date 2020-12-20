@@ -24,9 +24,6 @@ source "$MYZSH/oh-my-zsh.sh"
 # ==============================================================================
 source "$MYZSH/plugins.zsh"
 
-# Force the use of aliases
-export ZSH_PLUGINS_ALIAS_TIPS_FORCE=1
-
 # Source plugins and add commands to $PATH
 zplug load
 
